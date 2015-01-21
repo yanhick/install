@@ -1,31 +1,20 @@
 - hosts: all
   sudo: yes
   tasks:
-      - name: Ensure dependencies are installed.
+      - name: Ensure Git is installed.
+        apt: pkg=git state=installed
+
+      - name: Ensure Vim is installed.
+        apt: pkg=vim state=installed
+
+      - name: Ensure curl  is installed.
         apt: pkg=curl state=installed
 
-      - name: Add Jenkins apt repository key.
-        apt_key:
-          url: "https://jenkins-ci.org/debian/jenkins-ci.org.key"
-          state: present
+      - name: Download spf13 install script
+        get_url: dest=spf13-vim.sh url=https://j.mp/spf13-vim3
 
-      - name: Add Jenkins apt repository.
-        apt_repository:
-          repo: "deb http://pkg.jenkins-ci.org/debian binary/"
-          state: present
-          update_cache: yes
+      - name: install Spf13 for vim
+        shell: "spf13-vim.sh"
 
-      - name: Ensure Git is installed.
-        apt: pkg=jenkins state=installed
 
-      - name: Ensure Jenkins-cli is installed.
-        apt: pkg=jenkins-cli state=installed
 
-      - name: Ensure Jenkins is running
-        action: service name=jenkins state=started
-
-      - name: Create a job with Jenkins-cli using an existing jobs xml
-        shell: 'jenkins-cli -s http://localhost:8080 create-job test < /vagrant/jobs/test.xml'
-
-      - name: Install the Swarm plugin
-        shell: 'jenkins-cli -s http://localhost:8080 install-plugin swarm'

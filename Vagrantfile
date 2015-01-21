@@ -13,4 +13,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           ansible.playbook = "install.yml"
       end
   end
+  config.ssh.forward_x11 = true
 end
