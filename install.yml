@@ -11,10 +11,18 @@
         apt: pkg=curl state=installed
 
       - name: Download spf13 install script
-        get_url: dest=spf13-vim.sh url=https://j.mp/spf13-vim3
+        get_url: 
+            dest=/tmp/spf13-vim.sh 
+            url=https://j.mp/spf13-vim3
+            validate_certs=no
+
+      - name: Make spf13 script executable
+        file:
+          dest=/tmp/spf13-vim.sh
+          mode="u=x"
 
       - name: install Spf13 for vim
-        shell: "spf13-vim.sh"
+        shell: "/tmp/spf13-vim.sh"
 
 
 
