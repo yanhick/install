@@ -1,14 +1,29 @@
 - hosts: all
   sudo: yes
   tasks:
-      - name: Ensure Git is installed.
-        apt: pkg=git state=installed
+      - name: Ensure {{ item }} is installed.
+        apt: 
+            pkg={{ item }}
+            state=installed
+        with_items:
+            - git
+            - vim
+            - curl
+            - build-essential
 
-      - name: Ensure Vim is installed.
-        apt: pkg=vim state=installed
+      - name: Clone node.js
+        git: 
+            repo=https://github.com/joyent/node
+            dest=/tmp/node
 
-      - name: Ensure curl  is installed.
-        apt: pkg=curl state=installed
+      - name: Install node.js
+        command: "{{ item }}"
+        args:
+            chdir: /tmp/node
+        with_items:
+            - ./configure
+            - make
+            - make install
 
       - name: Download spf13 install script
         get_url: 
