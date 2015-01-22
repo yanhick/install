@@ -10,6 +10,9 @@
             - vim
             - curl
             - build-essential
+            - ocaml
+            - libz-dev
+            - i3
 
       - name: Clone node.js
         git: 
@@ -24,6 +27,20 @@
             - ./configure
             - make
             - make install
+
+      - name: Clone Haxe
+        git: 
+            repo=https://github.com/HaxeFoundation/haxe.git
+            dest=/tmp/haxe
+      
+      - name: Install Haxe
+        command: "{{ item }}"
+        args:
+          chdir: /tmp/haxe
+        with_items:
+            - make
+            - make install
+
 
       - name: Download spf13 install script
         get_url: 
